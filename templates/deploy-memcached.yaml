@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: {{ template "mtc.name" . }}-{{ .Release.Name }}-memcached
+  labels:
+    app: {{ template "mtc.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.memcached.replicaCount }} 
+  selector:
+    matchLabels:
+      app: {{ template "mtc.name" . }}
+      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
+      tier: memcached
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: {{ template "mtc.name" . }}
+        chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+        release: {{ .Release.Name }}
+        heritage: {{ .Release.Service }}
+        tier: memcached
+    spec:
+      containers:
+      - name: memcached
+        image: "{{ .Values.memcached.image.repo }}:{{ .Values.memcached.image.tag }}" 
+        imagePullPolicy: {{ .Values.memcached.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.memcached.port }} 
+          name: memcached
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30

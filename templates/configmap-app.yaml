@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "mtc.name" . }}-{{ .Release.Name }}-config
+data:
+  config.php: |
+    <?php
+    $config['db']['host'] = '{{ .Values.mysql.service.name }}';
+    $config['db']['port'] = '{{ .Values.mysql.service.port }}';
+    $config['db']['username'] = '{{ .Values.mysql.username }}';
+    $config['db']['password'] = getenv('MYSQL_PASSWORD', true)';
+    $config['db']['dbname'] = '{{ .Values.mysql.dbname }}';
+    $config['cache']['enabled'] = true;
+    $config['cache']['frontend'] = 'Core';
+    $config['cache']['frontendOptions']['cache_id_prefix'] = 'xf_';
+    $config['cache']['cacheSessions'] = true;
+    $config['cache']['backend'] = 'Memcached';
+    $config['cache']['backendOptions'] = array(
+        'compression' => false,
+        'servers' => array(
+            array(
+                'host' => '{{ template "mtc.name" . }}-{{ .Release.name }}-memcached',
+                'port' => '{{ .Values.memcached.service.port }}',
+            )
+        )
+    );
+    $config['externalDataUrl'] = 'https://cdn.mturkcrowd.com/data';
+    $config['javaScriptUrl'] = 'https://cdn.mturkcrowd.com/js';
+    $config['superAdmins'] = '1,4,5,6,7';
+    $_SERVER['HTTPS'] = 'on';
+

@@ -1,0 +1,40 @@
+mtc:
+  replicaCount: 1
+  volumeClaim: nfs
+  xenforoToken: set_me
+  nginx:
+    image:
+      repo: jefflaplante/nginx 
+      tag: latest
+      pullPolicy: IfNotPresent
+    port: 80
+  php:
+    image:
+      repo: jefflaplante/mtc 
+      tag: 7_1.5
+      pullPolicy: IfNotPresent
+    port: 9000
+  service:
+    type: NodePort
+    nodePort: 31435 
+    port: 80
+
+memcached:
+  replicaCount: 1
+  image:
+    repo: memcached
+    tag: alpine 
+    pullPolicy: IfNotPresent
+  port: 11211 
+  service:
+    type: ClusterIP
+    port: 11211 
+
+mysql:
+  service:
+    name: mysql
+    port: 3306
+  dbname: mturkcrowd
+  username: mturkcrowd
+  password: set_me
+

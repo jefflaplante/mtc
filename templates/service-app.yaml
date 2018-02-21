@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "mtc.name" . }}-{{ .Release.Name }}-app
+  labels:
+    app: {{ template "mtc.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.memcached.service.type }} 
+  externalTrafficPolicy: Cluster
+  ports:
+  - nodePort: {{ .Values.mtc.service.nodePort }}
+    port: {{ .Values.mtc.service.port }} 
+    protocol: TCP
+    targetPort: {{ .Values.mtc.nginx.port }} 
+  selector:
+    app: {{ template "mtc.name" . }}
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    tier: app 
+  sessionAffinity: None
+
