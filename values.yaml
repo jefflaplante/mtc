@@ -1,7 +1,6 @@
 mtc:
   replicaCount: 1
-  volumeClaim: nfs
-  xenforoToken: set_me
+  xenforoToken: override_this 
   nginx:
     image:
       repo: jefflaplante/nginx 
@@ -11,7 +10,7 @@ mtc:
   php:
     image:
       repo: jefflaplante/mtc 
-      tag: 7_1.5
+      tag: "7_1.5"
       pullPolicy: IfNotPresent
     port: 9000
   service:
@@ -32,9 +31,9 @@ memcached:
 
 mysql:
   service:
-    name: mysql
+    name: mtcdb-mysql.default.svc.cluster.local 
     port: 3306
   dbname: mturkcrowd
   username: mturkcrowd
-  password: set_me
+  password: override_this 
 

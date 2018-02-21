@@ -8,7 +8,7 @@ data:
     $config['db']['host'] = '{{ .Values.mysql.service.name }}';
     $config['db']['port'] = '{{ .Values.mysql.service.port }}';
     $config['db']['username'] = '{{ .Values.mysql.username }}';
-    $config['db']['password'] = getenv('MYSQL_PASSWORD', true)';
+    $config['db']['password'] = getenv('MYSQL_PASSWORD', true);
     $config['db']['dbname'] = '{{ .Values.mysql.dbname }}';
     $config['cache']['enabled'] = true;
     $config['cache']['frontend'] = 'Core';
@@ -19,7 +19,7 @@ data:
         'compression' => false,
         'servers' => array(
             array(
-                'host' => '{{ template "mtc.name" . }}-{{ .Release.name }}-memcached',
+                'host' => '{{ template "mtc.name" . }}-{{ .Release.Name }}-memcached',
                 'port' => '{{ .Values.memcached.service.port }}',
             )
         )
