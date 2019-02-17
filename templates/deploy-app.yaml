@@ -109,7 +109,7 @@ spec:
       volumes:
       - name: nfs
         persistentVolumeClaim:
-          claimName: {{ template "mtc.name" . }}-{{ .Release.Name }}-nfs
+          claimName: nfs-mtc 
       - name: nginx
         configMap:
           name: {{ template "mtc.name" . }}-{{ .Release.Name }}-nginx
